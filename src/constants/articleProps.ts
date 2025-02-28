@@ -168,6 +168,17 @@ export const fontSizeOptions: OptionType[] = [
 	{ title: '38px', value: '38px', className: 'font-size-38' },
 ];
 
+export const fontSizeRecordMap: Record<string, FontSize> =
+	fontSizeOptions.reduce((acc, option) => {
+		const numericValue = parseInt(option.value) as FontSize;
+		if ([18, 25, 38].includes(numericValue)) {
+			acc[option.value] = numericValue;
+		}
+		return acc;
+	}, {} as Record<string, FontSize>);
+
+export type FontSize = 18 | 25 | 38;
+
 export const defaultArticleState = {
 	fontFamilyOption: fontFamilyOptions[0],
 	fontColor: fontColors[0],
@@ -177,3 +188,10 @@ export const defaultArticleState = {
 };
 
 export type ArticleStateType = typeof defaultArticleState;
+
+export type StateFieldType =
+	| 'fontFamilyOption'
+	| 'fontSizeOption'
+	| 'fontColor'
+	| 'backgroundColor'
+	| 'contentWidth';

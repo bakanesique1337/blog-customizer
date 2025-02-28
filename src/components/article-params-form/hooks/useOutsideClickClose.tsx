@@ -1,17 +1,28 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-type UseToggleSidebarVisibility = {
+type UseOutsideClickClose = {
 	isOpen: boolean;
 	rootRef: React.RefObject<HTMLElement>;
+	toggle: () => void;
 };
 
-export const useToggleSidebarVisibility = ({
+export const useOutsideClickClose = ({
 	isOpen,
 	rootRef,
-}: UseToggleSidebarVisibility) => {
+	toggle,
+}: UseOutsideClickClose) => {
 	useEffect(() => {
-		if (rootRef.current) {
-			rootRef.current.style.transform = isOpen ? 'translate(-616px)' : 'none';
-		}
+		const handleClick = (event: MouseEvent) => {
+			const { target } = event;
+			if (target instanceof Node && !rootRef.current?.contains(target)) {
+				isOpen && toggle();
+			}
+		};
+
+		window.addEventListener('mousedown', handleClick);
+
+		return () => {
+			window.removeEventListener('mousedown', handleClick);
+		};
 	}, [isOpen]);
 };
